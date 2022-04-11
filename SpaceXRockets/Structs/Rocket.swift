@@ -32,5 +32,27 @@ struct Rocket: Codable, Identifiable {
     let description: String
     let id: String
     
+    func getImageUrl() -> URL {
+        if let url = URL(string: self.flickrImages.randomElement() ?? "Error") {
+            return url
+        }
+        fatalError("Could not load the image")
+    }
+    
+    func getMeasures(for measure: String, in unit: units) -> Double? {
+        switch measure {
+        case "Высота":
+            return height.getHeight(in: unit)
+        case "Диаметр":
+            return diameter.getDiameter(in: unit)
+        case "Масса":
+            return mass.getMass(in: unit)
+        case "Нагрузка":
+            return payloadWeights[0].getPayloadWeight(in: unit)
+        default:
+            return nil
+        }
+    }
+    
     
 }

@@ -17,4 +17,15 @@ struct payloadWeights: Codable, Identifiable {
     let name: String
     let kg: Int
     let lb: Int
+
+    func getPayloadWeight(in unit: units) -> Double? {
+        switch unit {
+        case .kg:
+            return Double(kg)
+        case .lb:
+            return Double(lb)
+        default:
+            return nil
+        }
+    }
 }

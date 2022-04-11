@@ -18,64 +18,22 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                ZStack(alignment: .bottom) {
-                    Image("2")
-                        .resizable()
-                        .scaledToFit()
-                        .ignoresSafeArea()
-
-                    VStack {
-
-                        HStack {
-                            Text("Falcon Heavy")
-                                .fontWeight(.semibold)
-                            Spacer()
-                            Image(systemName: "gearshape")
-                        }
-                        .padding()
-                        .font(.largeTitle)
-
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(1...4, id: \.self) { _ in
-
-                                    VStack {
-                                        Text("120")
-                                            .fontWeight(.bold)
-                                        Text("Высота")
-                                            .fontWeight(.thin)
-                                            .opacity(0.7)
-                                    }
-                                    .padding()
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .fill(.lightBackground)
-                                    )
-                                }
-                            }
-                        }
-                        .padding()
-                        
-                        List(rockets) { rocket in
-                            Text(rocket.name)
-                        }
-                        .task {
-                            await getData(from: url)
-                        }
-                    }
-                    .background(
-                        RoundedCornerShape(radius: 30)
-                            .fill(.darkBackground)
-                    )
+            VStack {
+                if rockets.count > 0 {
+                    PageView(pages: rockets.map { rocket in
+                        RocketView(rocket: rocket)
+                    })
+                    .ignoresSafeArea()
                 }
             }
-            .ignoresSafeArea()
-            .navigationTitle("Name of rocket") // TODO:
-            .navigationBarHidden(true)
-            .background(.darkBackground)
+//            .navigationBarHidden(true)
             .preferredColorScheme(.dark)
+//            .background(.darkBackground)
+            .task {
+                await getData(from: url)
+            }
         }
+
     }
 
     func getData(from url: String) async {
